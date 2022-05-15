@@ -50,10 +50,6 @@ body{
     color: #D70900;
 }
 
-.logo>button:hover{
-    cursor: pointer;
-}
-
 .header{
     display: flex;
     justify-content: center;
@@ -123,7 +119,7 @@ body{
 
 .card-front{
     width: 299px;
-    height: 131px;
+    min-height: 131px;
     box-sizing: border-box;
 
     background: #FFFFD5;
@@ -145,6 +141,8 @@ body{
     line-height: 22px;
 
     color: #333333;
+
+    margin-bottom: 20px;
 }
 
 .card-front > img{
@@ -221,6 +219,9 @@ body{
     color: #333333;
 }
 
-li:hover{
+.logo>button:hover, 
+.card-back,
+.card-front>img,
+.buttons>button{
     cursor: pointer;
 }

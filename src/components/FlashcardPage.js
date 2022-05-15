@@ -53,25 +53,42 @@ function Flashcards(){
 function Flashcard({back, question, answer}){
     const [clicked, setClicked] = React.useState(false);
 
-    function TurnCard(){
-        setClicked(true);
-    }
-
     return(
         <li>
             {clicked ?(
-                <div className="card-front">
-                    <span> {question}</span>
-                    <span>{answer}</span>
-                    <img src={setinha} alt="Seta"/>
-                </div> 
+                <FlashcardFront question={question} answer={answer}/>
             ) : (
-                <div className="card-back">
+                <div className="card-back" onClick={()=>setClicked(true)}>
                     <span>{back}</span>
-                    <ion-icon onClick={TurnCard}name="play-outline"></ion-icon>
+                    <ion-icon name="play-outline"></ion-icon>
                 </div>
             )}
         </li>
+    )
+}
+
+function FlashcardFront({question, answer}){
+    const [answered, setAnswered] = React.useState(true);
+
+    return(
+        <>
+            {answered ? (
+                        <div className="card-front">
+                            <span> {answer}</span>
+                            <div className="buttons">
+                                <button className="wrong"> Não lembrei </button>
+                                <button className="almost"> Quase não lembrei </button>
+                                <button className="rigth"> Zap! </button>
+                            </div>
+                        </div>      
+                    ) : (
+                        <div className="card-front">
+                            <span> {question}</span>
+                            <img src={setinha} alt="Seta"/>
+                        </div>
+
+                    )}
+        </>
     )
 }
 
@@ -82,6 +99,7 @@ function Footer(){
         </div>
     )
 };
+
 
 // function Outros(){
 //    return(
