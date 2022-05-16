@@ -110,6 +110,19 @@ body{
     margin-left: 15px;
 }
 
+.card-back >.red{
+    color: #FF3030;
+}
+
+.card-back >.orange{
+    color: #FF922E;
+}
+
+.card-back > .green{
+    color: #2FBE34;
+}
+
+
 .card-back > ion-icon{
     width: 20px;
     height: 23px;
@@ -184,6 +197,10 @@ body{
     border: none;
 }
 
+.white{
+    color: #FFFFFF;
+}
+
 .wrong{
     background-color: #FF3030;
 }
@@ -196,6 +213,7 @@ body{
     background-color: #2FBE34;
 }
 
+
 .footer{
     width: 100%;
     height: 70px;
@@ -206,6 +224,7 @@ body{
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -217,6 +236,16 @@ body{
     font-size: 18px;
     line-height: 22px;
     color: #333333;
+}
+
+.footer > .icons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+} 
+
+.strikethrough{
+    text-decoration: line-through;
 }
 
 .logo>button:hover, 

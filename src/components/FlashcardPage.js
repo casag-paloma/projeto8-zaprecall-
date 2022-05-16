@@ -20,103 +20,107 @@ const deck = [
 const shuffledDeck = deck.sort(shuffler);
 
 export default function FlashcardPage(){
+    const [ qtd, setQtd] =React.useState(0);
+    const [ icons, setIcons] =React.useState([
+            {}                    
+    ]);
+    const [firstIcon, setFirstIcon] = React.useState(true);
     
+    function AddQtd(){
+        setQtd(qtd+1);
+    }
+
+    function AddIcons(newIcon, newClass){
+        if(firstIcon){
+            setIcons([{name:newIcon, class:newClass}])
+            setFirstIcon(false);
+            console.log("firsticon")
+        } else{
+            setIcons([...icons,{name:newIcon, class:newClass}])
+        }
+
+    }
+
+
     return(
         <>
-            <Header/>
-            <Flashcards/>
-            <Footer/>
+            <div className="header">
+                <img src={logoPequeno} alt="Logo Pequeno"/>
+                <span> ZapRecall </span>
+            </div>
+
+            <ul className="cards">
+                {shuffledDeck.map((flashcard, index) => <Flashcard key={index} back={`Pergunta ${index+1}`} question={flashcard.question} answer={flashcard.answer} AddQtd={AddQtd} AddIcons={AddIcons} /> )}
+            </ul>
+
+            <div className="footer">
+                <span> {qtd}/8 CONCLUIDOS</span>
+                <AnswerIcon>
+                    {icons.map((icon, index) => <ion-icon key={index}  name={icon.name} className={icon.class}></ion-icon> )}
+                </AnswerIcon>
+            </div>
         </>
     );
 };
 
-function Header(){
-    return(
-        <div className="header">
-            <img src={logoPequeno} alt="Logo Pequeno"/>
-            <span> ZapRecall </span>
-        </div>
-    )
-};
 
-
-
-function Flashcards(){
-    return(
-        <ul className="cards">
-            {shuffledDeck.map((flashcard, index) => <Flashcard key={index} 
-            back={`Pergunta ${index+1}`} question={flashcard.question} answer={flashcard.answer}/>)}
-        </ul>
-    )
-};
-
-function Flashcard({back, question, answer}){
+function Flashcard({back, question, answer, AddQtd, AddIcons}){
     const [clicked, setClicked] = React.useState(false);
+    const [answered, setAnswered] = React.useState(false);
+    const [type, setType] = React.useState();
+    const [icon, setIcon] = React.useState("play-outline");
+    const [iconClass, setIconClass] = React.useState();
+
+    function ClickButton(type, icon, iconClass){
+        setClicked(false);
+        setType(`${type} strikethrough`)
+        setIcon(icon);
+        setIconClass(`white ${iconClass}`);
+        AddQtd();
+        AddIcons(icon, iconClass);
+    }
+
+    function OpenFlashcard(){
+        if(!answered){
+            setClicked(true)
+        }
+    }
 
     return(
         <li>
             {clicked ?(
-                <FlashcardFront question={question} answer={answer}/>
+                <>
+                {answered ? (
+                        <div className="card-front">
+                            <span> {answer}</span>
+                            <div className="buttons">
+                                <button onClick={()=>ClickButton("red","close-circle-outline", "wrong")}className="wrong"> Não lembrei </button>
+                                <button onClick={()=>ClickButton("orange","help-circle-outline", "almost")} className="almost"> Quase não lembrei </button>
+                                <button onClick={()=>ClickButton("green","checkmark-circle-outline", "rigth")}className="rigth"> Zap! </button>
+                            </div>
+                        </div>      
+                    ) : (
+                        <div className="card-front">
+                            <span> {question}</span>
+                            <img src={setinha} alt="Seta" onClick={()=>setAnswered(true)}/>
+                        </div>
+                    )}
+
+                </>
             ) : (
-                <div className="card-back" onClick={()=>setClicked(true)}>
-                    <span>{back}</span>
-                    <ion-icon name="play-outline"></ion-icon>
+                <div className="card-back" onClick={OpenFlashcard}>
+                    <span className={type}>{back}</span>
+                    <ion-icon className={iconClass} name={icon}></ion-icon>
                 </div>
             )}
         </li>
     )
 }
 
-function FlashcardFront({question, answer}){
-    const [answered, setAnswered] = React.useState(true);
-
+function AnswerIcon({children}){
     return(
-        <>
-            {answered ? (
-                        <div className="card-front">
-                            <span> {answer}</span>
-                            <div className="buttons">
-                                <button className="wrong"> Não lembrei </button>
-                                <button className="almost"> Quase não lembrei </button>
-                                <button className="rigth"> Zap! </button>
-                            </div>
-                        </div>      
-                    ) : (
-                        <div className="card-front">
-                            <span> {question}</span>
-                            <img src={setinha} alt="Seta"/>
-                        </div>
-
-                    )}
-        </>
-    )
-}
-
-function Footer(){
-    return(
-        <div className="footer">
-            <span> 0/4 CONCLUIDOS</span>
+        <div className="emoticons">
+            {children}
         </div>
     )
-};
-
-
-// function Outros(){
-//    return(
-//        <>
-//        <div className="card-front">
-//              <span> {deck[1].question}</span>
-//                <img src={setinha} alt="Seta"/>
-//            </div>
-//
-//            <div className="card-frente">
-//                <span> {deck[1].answer}</span>
-//                <div className="buttons">
-//                    <button className="errado"> Não lembrei </button>
-//                    <button className="quase"> Quase não lembrei </button>
-//                    <button className="certo"> Zap! </button>
-//                </div>
-//            </div>
-//        </>
-//    )
-//}
+}
