@@ -320,9 +320,9 @@ body{
     text-decoration: line-through;
 }
 
-.logo>button:hover, 
-.card-back,
-.card-front>img,
-.buttons>button{
+.start-button:hover, 
+.card-back:hover,
+.card-front>img:hover,
+.buttons>button:hover{
     cursor: pointer;
 }
