@@ -83,7 +83,7 @@ export default function FlashcardPage(){
                 {finalized ? (
                     <div className="message">
                         <div className="primary-text">
-                            <img src={emoji}/>
+                            <img src={emoji} alt="Emoji"/>
                             <span> <strong> {message}</strong></span>
                         </div>
                         <div className="text"> {text}</div>
