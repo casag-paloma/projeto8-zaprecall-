@@ -1,6 +1,8 @@
 import React from "react";
 import logoPequeno from "../assets/img/logo-pequeno.png";
 import setinha from "../assets/img/setinha.png"
+import party from "../assets/img/party.png"
+import sad from "../assets/img/sad.png"
 
 function shuffler() { 
 	return Math.random() - 0.5; 
@@ -21,27 +23,51 @@ const shuffledDeck = deck.sort(shuffler);
 
 export default function FlashcardPage(){
     const [ qtd, setQtd] =React.useState(0);
-    const [ icons, setIcons] =React.useState([
-            {}                    
-    ]);
+    const [ icons, setIcons] =React.useState();
     const [firstIcon, setFirstIcon] = React.useState(true);
-    
+    const [finalized, setFinalized] = React.useState(false);
+    const [emoji, setEmoji]= React.useState();
+    const [message, setMessage] = React.useState();
+    const [text, setText] = React.useState();
+    const [hasWrong, setHasWrong] = React.useState(false);
+
     function AddQtd(){
         setQtd(qtd+1);
     }
 
     function AddIcons(newIcon, newClass){
         if(firstIcon){
-            setIcons([{name:newIcon, class:newClass}])
+            setIcons([{name:newIcon, class:`white ${newClass}`}])
             setFirstIcon(false);
-            console.log("firsticon")
         } else{
-            setIcons([...icons,{name:newIcon, class:newClass}])
+            setIcons([...icons,{name:newIcon, class:`white ${newClass}`}])
         }
-
     }
 
-
+    function VerifyWrong(){
+        
+        if(icons.length === 8){
+            setFinalized(true);
+            for(let i = 0; i < icons.length; i++){
+                if(icons[i].class === "white wrong"){
+                    setHasWrong(true);
+                }
+            }
+        }
+    };
+    
+    function RenderMessage(){
+        if(hasWrong){    
+            setEmoji(sad);
+            setMessage("Putz...");
+            setText("Ainda faltam alguns... Mas não desanime!");
+        } else{
+            setEmoji(party);
+            setMessage("Parabéns!");
+            setText("Você não esqueceu de nenhum flashcard!!");
+        }        
+    }
+    
     return(
         <>
             <div className="header">
@@ -54,13 +80,29 @@ export default function FlashcardPage(){
             </ul>
 
             <div className="footer">
-                <span> {qtd}/8 CONCLUIDOS</span>
-                <AnswerIcon>
-                    {icons.map((icon, index) => <ion-icon key={index}  name={icon.name} className={icon.class}></ion-icon> )}
-                </AnswerIcon>
+                {finalized ? (
+                    <div className="message">
+                        <div className="primary-text">
+                            <img src={emoji}/>
+                            <span> <strong> {message}</strong></span>
+                        </div>
+                        <div className="text"> {text}</div>
+                    </div>                
+                ):(
+                    <></>
+                )}
+                <div> {qtd}/8 CONCLUIDOS</div>
+                { firstIcon ? (
+                    <></>
+                ):(
+                    <AnswerIcon VerifyWrong={VerifyWrong} RenderMessage={RenderMessage}>
+                        {icons.map((icon, index) => <ion-icon key={index}  name={icon.name} class={icon.class}></ion-icon> )}
+                    </AnswerIcon>
+                )}
             </div>
         </>
     );
+
 };
 
 
@@ -92,16 +134,16 @@ function Flashcard({back, question, answer, AddQtd, AddIcons}){
                 <>
                 {answered ? (
                         <div className="card-front">
-                            <span> {answer}</span>
+                            <div className="question"> {answer}</div>
                             <div className="buttons">
-                                <button onClick={()=>ClickButton("red","close-circle-outline", "wrong")}className="wrong"> Não lembrei </button>
-                                <button onClick={()=>ClickButton("orange","help-circle-outline", "almost")} className="almost"> Quase não lembrei </button>
-                                <button onClick={()=>ClickButton("green","checkmark-circle-outline", "rigth")}className="rigth"> Zap! </button>
+                                <button onClick={()=>ClickButton("red","close-outline", "wrong")}className="wrong"> Não lembrei </button>
+                                <button onClick={()=>ClickButton("orange","help-outline", "almost")} className="almost"> Quase não lembrei </button>
+                                <button onClick={()=>ClickButton("green","checkmark-outline", "rigth")}className="rigth"> Zap! </button>
                             </div>
                         </div>      
                     ) : (
                         <div className="card-front">
-                            <span> {question}</span>
+                            <div className="question"> {question}</div>
                             <img src={setinha} alt="Seta" onClick={()=>setAnswered(true)}/>
                         </div>
                     )}
@@ -110,17 +152,19 @@ function Flashcard({back, question, answer, AddQtd, AddIcons}){
             ) : (
                 <div className="card-back" onClick={OpenFlashcard}>
                     <span className={type}>{back}</span>
-                    <ion-icon className={iconClass} name={icon}></ion-icon>
+                    <ion-icon class={iconClass} name={icon}></ion-icon>
                 </div>
             )}
         </li>
     )
-}
+};
 
-function AnswerIcon({children}){
+function AnswerIcon({children, VerifyWrong, RenderMessage}){
+    VerifyWrong()
+    RenderMessage()
     return(
-        <div className="emoticons">
+        <div className="icons">
             {children}
         </div>
     )
-}
+};
