@@ -5,6 +5,9 @@ body{
 .root{
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .logo{
@@ -78,7 +81,9 @@ body{
 }
 
 .cards{
-    height: 375px;
+    position: absolute;
+    top: 153px ;
+    height: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
