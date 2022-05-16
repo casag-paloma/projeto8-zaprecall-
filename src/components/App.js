@@ -25,7 +25,7 @@ function WelcomePage(){
             <img src={logo} alt="Logo" />
             <h1>ZapRecall</h1>
             <Link to={"/flashcards"}>
-                <button > Inicial Recall!</button>
+                <button className="start-button" > Inicial Recall!</button>
             </Link>
         </div>
     );

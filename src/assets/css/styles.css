@@ -38,7 +38,7 @@ body{
     margin: 13px auto 30px auto;
 }
 
-.logo > button{
+.start-button{
     width: 246px;
     height: 54px;
     background-color: #FFFFFF;
